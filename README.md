@@ -1,7 +1,6 @@
-#  Java Hibernate Advance Mappings
+#  Java Spring REST API
 
 ### Proje Kurulumu
-
 Projeyi öncelikle forklayın ve clone edin.
 Daha sonra projeyi IntellijIDEA kullanarak açınız. README.md dosyasını dikkatli bir şekilde okuyarak istenenleri yapmaya çalışın.
 Proje sayımız ilerledikçe proje yönetimimizi kolaylaştırmak adına projelerimizi belli klasör kalıplarında saklamak işimizi kolaylaştırmak adına iyi bir alışkanlıktır.
@@ -9,53 +8,55 @@ Proje sayımız ilerledikçe proje yönetimimizi kolaylaştırmak adına projele
 
 ### Hedeflerimiz:
 
-### Banking Rest Api
+### Secure Rest Api
 
  ### Başlangıç
+ * Proje içerisinde ```Spring Web```, ```Spring Boot Security``` dependency mutlaka olmalı.
  * Maven dependency management sistemini kullanarak tüm dependencyleri install edin.
- * Uygulamanızı  ```8080``` portundan ayağa kaldırın.
- * Bir banka uygulaması için rest api dizayn etmeniz istenmektedir.
+ * Uygulamanızı  ```9000``` portundan ayağa kaldırın.
+ * Bir banka için rest api dizayn etmeniz istenmektedir.
+ * schema olarak ```bank``` isminde bir schema oluşturun ve tüm veritabanı tablolarınızı bu schema içerisinde tanımlayın.
 
-### Görev 1
-* Veri tabanı dizaynınız şu şekilde olmalı. Toplam 3 tablo yazmanız gerekmektedir.
-* ```address``` tablosu => (id, street, no, city, country, description) kolonlarından oluşmalı.
-* ```id``` primary_key olarak işaretlenmeli. ```description``` alanı optional set edilmeli
-* ```customer``` tablosu => (id, first_name, last_name, email, salary, address_id) bilgilerini içermeli.
-* Her Customer sadece bir tane adrese sahip olabilir. 
-* Herhangi bir customer ilgili tablodan silinirse Customer'a ait olan address bilgisi de veri tabanından silinmelidir.
-* Herhangi bir adress bilgisi veri tabanından silinirse ilgili dataya sahip olan customer objesi veri tabanından silinmemelidir.
-* ```account``` tablosu (id, account_name, money_amount, customer_id) kolonlarından oluşmalı.
-* ```id``` primary_key olarak işaretlenmeli.
-* Bir Customer'in birden çok Account'u olabilir.
+### Amaç
+ * Spring Boot Security ile yapılabilen security türlerini tanımak ve uygulamak
+ 
+ ### Görev 1
+ * main metodunuzun olduğu paket altında ```controller```, ```config```, ```entity```, ```dao```, ```service``` isminde 5 adet daha paket oluşturunuz.
+ * Project Lombok'u dependency olarak uygulamanıza ekleyin.
+ * ```entity``` paketinin altına JDBCAuthentication için ```Member``` adında bir sınıf tanımlayınız. İçerisinde instance variable olarak ```id, email, password``` isminde 3 tane değişken oluşturun.
+ * ```entity``` paketinin altına JDBCAuthentication için ```Role``` adında bir sınıf oluşturunuz içerisine ```id, authority``` adında 2 field ekleyiniz.
+ * Member ve Role arasında many-to-many bir ilişki tanımlamalısınız.
+ * ```entity``` paketinin altına JDBCAuthentication için ```Account``` adında bir sınıf tanımlayınız. İçerisinde instance variable olarak ```id, name``` isminde 2 tane değişken oluşturun.
+ * ```dao``` paketinin altına ```MemberRepository``` adinda bir interface tanımlayınız. İçerisinde emaile göre kullanıcıları almalı.
+ * Lombok ve JPA annotation larını uygulayarak bütün sınıfı bir veritabanı tablosu olucak şekilde işaretleyiniz.
+ * ```application.properties``` dosyanızı kullanarak veritabanı bağlantınızı kurun.
+ * Spring uygulamasının veritabanı loglarını açarak veritabanına yolladığınız her sorguyu inceleyin.
+ * dto paketi altında ```RegisterResponse``` ve ```RegistrationMember``` adında 2 tane record tanımlayın.
+ * ```RegisterResponse``` AuthController sınıfında register metodunun dönüş tipi olmalıdır. 
+ * ```RegistrationMember``` AuthController sınıfında register metodunun parametresinin tipi olmalıdır.
 
- ### Görev 2
- *  ```controller```, ```service```, ```dao```, ```entity```,  isminde 4 adet daha paket oluşturunuz.
- * ```entity``` paketinin altına ```Address```, ```Customer```, ```Account``` isimli üç tane sınıf oluşturunuz.
- * ```Address```, ```Customer``` ve ```Account``` sınıfları project lombok annotationlarını kullanarak oluşturulmalılar.
- * ```Address``` ve ```Customer``` sınıflarının birbirleri arasındaki ilişkiyi tanımlayan annotationları kullanın.(One-to-One)
- * ```Customer``` ve ```Account``` sınıflarının birbirleri arasındaki ilişkiyi tanımlayan annotationları kullanın.(One-to-Many)
+### Görev 2
+ * Service ve Dao paketi katmanlarını yazmalısınız. 
+ * Account objesi MVC kurallarına uygun olarak veritabanı işlemlerini yapabilmeli.
+ * CRUD işlemlerini Service katmanı karşılayabilmeli
 
  ### Görev 3
- * ```AddressController```, ```CustomerController```, ```AccountController``` isimli 3 tane controller yazmalısınız.
- * Amacımız CRUD işlemlerini tanımlayan endpointler yazmak. 
- * [GET]/workintech/address => veri tabanaında kayıtlı tüm address bilgilerini döner.
- * [GET]/workintech/address/{id} => İlgili id deki address objesini döner.
- * [POST]/workintech/address => Bir adet address objesini veri tabanına ekler.
- * [PUT]/workintech/address/{id} => İlgili id deki address objesinin değerlerini günceller.
- * [DELETE]/workintech/address/{id} => İlgili id değerindeki address objesini siler.
-
- * [GET]/workintech/customers => veri tabanında kayıtlı tüm customer bilgilerini döner.
- * [GET]/workintech/customers/{id} => İlgili id deki customer objesini dönmeli.
- * [POST]/workintech/customers => Bir adet customer objesini veri tabanına ekler
- * [PUT]/workintech/customers/{id} => İlgili id deki customer objesinin değerlerini günceller.
- * [DELETE]/workintech/customers/{id} => İlgili id değerindeki customer objesini siler.
-
-* [GET]/workintech/accounts => veri tabanında kayıtlı tüm account bilgilerini döner.
-* [GET]/workintech/accounts/{id} => İlgili id deki account objesini dönmeli.
-* [POST]/workintech/accounts/{customerId} => Parametre olarak gelen id ile ilgili customeri bulur ve Account objesini Customer ile ilişkilendirip veri tabanına kaydeder. 
-* [PUT]/workintech/accounts/{customerId} =>Parametre olarak gelen id ile ilgili customeri bulur ve Account objesinin yeni bilgilerini güncelleyip Customer ile ilişkilendirip veri tabanına kaydeder.
-* [DELETE]/workintech/accounts/{id} => İlgili id değerindeki account objesini siler.
+ * ```controller``` paketi altında ```AccountController, AuthController``` adında 2 tane controller yazmalısınız.
+ * AccountService sınıfını AccountController sınıfı altında ```Dependency Injection``` yöntemini kullanarak çağırınız.
+ * İlk olarak Member kaydebilmek için [POST]/workintech/auth/register şeklinde bir endpoint tanımlayın ve buradan bir adet user rolünde bir adet admin rolünde kullanıcı tanımlayın.
+ * Amacımız CRUD işlemlerini tanımlayan endpointler yazmak.
+ * [GET]/workintech/accounts/ => tüm account listini dönmeli.
+ * [GET]/workintech/accounts/{id} => İlgili id deki account objesini dönmeli. 
+ * [POST]/workintech/accounts => Bir adet account objesini veritabanına kaydeder.
+ * [PUT]/workintech/accounts/{id} => İlgili id deki account objesinin değerlerini yeni gelen data ile değiştirir.
+ * [DELETE]/workintech/accounts/{id} => İlgili id değerindeki account objesini veritabanından siler.
+ 
 
 ### Görev 4
-* AccountResponse ve CustomerResponse adında 2 tane record oluşturunuz.
-* Endpointlerin dönüş tipleri bu sınıfların tipinde olmalıdır.
+ * ```application.properties``` dosyasına kendi kullanıcı isminizi ve şifrenizi giriniz.
+ * Basic auth yöntemini kullanarak sistemdeki tüm endpointlere ulaşmayı deneyiniz.
+ * JDBCAuthentication yöntemi ile  tüm endpointlere ulaşmayı deneyiniz. 
+ * [POST]/workintech/auth/register => member tablosunda yeni bir kullanıcı oluşturmalı.
+ * [GET] requestlerine ```user ve admin``` rolündeki kullanıcılar request atabilmeli.
+ * [POST], [PUT], [DELETE] requestlerine sadece ```admin``` rolündeki kullanıcılar request atabilir.
+ * OAuth2 yöntemini kullanarak Github ile uygulamanızdaki [GET]endpointlerine ulaşmayı deneyiniz.
